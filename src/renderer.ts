@@ -1,12 +1,14 @@
+import Component from './component'
+import { isElement } from './lib/utils'
+
 class Renderer {
-  container: any
-  selector: any
+  mount(container: (new () => Component) | HTMLElement, selector: string) {
+    if (!container) {
+      throw new Error(
+        'Error mounting container - the container passed in was invalid or does not exist',
+      )
+    }
 
-  constructor(container: any) {
-    this.container = container
-  }
-
-  mount(selector: string) {
     if (!selector) {
       throw new Error(
         'Error mounting container - the selector passed in was invalid',
@@ -14,12 +16,13 @@ class Renderer {
       return
     }
 
-    this.selector = selector
-
-    const found_container = document.querySelector(this.selector)
+    const found_container = document.querySelector(selector),
+      markup: HTMLElement = isElement(container)
+        ? (container as HTMLElement)
+        : new (container as new () => Component)().render()
 
     if (found_container) {
-      found_container.appendChild(this.container)
+      found_container.appendChild(markup)
     }
   }
 }
