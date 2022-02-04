@@ -1,7 +1,10 @@
 abstract class Component {
   state?: any
+  props?: Record<string, any>
+  children: Record<string, Component> = {}
+  directMarkup?: HTMLElement
+  private parent?: HTMLElement | Component
   abstract name?: string
-
   abstract render(): HTMLElement
 
   setState(newState: any): void {
@@ -10,6 +13,29 @@ abstract class Component {
     }
 
     this.state = newState
+  }
+
+  setParent(parent: HTMLElement | Component) {
+    if (parent) {
+      this.parent = parent
+    }
+  }
+
+  setChildren(components: Component | Array<Component>) {
+    if (!Array.isArray(components)) components = [components]
+
+    for (const component of components) {
+      if (component.name) {
+        component.setParent(this)
+
+        this.children[component.name] = component
+      }
+    }
+  }
+
+  runRender(): HTMLElement {
+    this.directMarkup = this.render()
+    return this.directMarkup
   }
 
   /**

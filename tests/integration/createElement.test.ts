@@ -8,7 +8,7 @@ class HelloWorld extends Component {
   name = 'helloworld'
 
   render(): HTMLElement {
-    return createElement('div', null, `Hello World!`)
+    return createElement(this.name, null, `Hello World!`)
   }
 }
 
@@ -32,9 +32,33 @@ describe('When creating a single new element', function () {
     renderer.mount(HelloWorld, '#app')
 
     // Get Element that was mounted
-    const element = document.querySelector('#app > div')
+    const element = document.querySelector('#app > helloworld')
 
     // See if it was appended to DOM
     assert.equal(element.innerHTML, 'Hello World!')
+  })
+
+  it('Should render all children objects', function () {
+    renderer.mount(
+      class extends Component {
+        name = 'goodbyeworld'
+
+        render(): HTMLElement {
+          return createElement(this.name, null, [
+            createElement(HelloWorld, null, null),
+          ])
+        }
+      },
+      '#app',
+    )
+
+    // Get Elements from DOM
+    const goodbyeElement = document.querySelector('#app > goodbyeworld')
+    const helloElement = document.querySelector(
+      '#app > goodbyeworld > helloworld',
+    )
+
+    assert.isOk(goodbyeElement)
+    assert.isOk(helloElement)
   })
 })

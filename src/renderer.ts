@@ -19,7 +19,7 @@ class Renderer {
     const found_container = document.querySelector(selector),
       markup: HTMLElement = isElement(container)
         ? (container as HTMLElement)
-        : new (container as new () => Component)().render()
+        : new (container as new () => Component)().runRender()
 
     if (found_container) {
       found_container.appendChild(markup)
