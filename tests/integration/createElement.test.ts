@@ -61,4 +61,35 @@ describe('When creating a single new element', function () {
     assert.isOk(goodbyeElement)
     assert.isOk(helloElement)
   })
+
+  it("Should add props to it's private properties", function () {
+    const props: Record<string, any> = {
+      hello: 'world!',
+    }
+
+    renderer.mount(
+      class extends Component {
+        name = 'helloworldprops'
+
+        constructor(props) {
+          super(props)
+        }
+
+        render(): HTMLElement {
+          return createElement(this.name, props, `Hello - ${this.props.hello}`)
+        }
+      },
+      '#app',
+      {
+        props,
+      },
+    )
+
+    const propsElement: HTMLElement = document.querySelector(
+      '#app > helloworldprops',
+    )
+
+    assert.isOk(propsElement)
+    assert.equal(propsElement.innerHTML, 'Hello - world!')
+  })
 })

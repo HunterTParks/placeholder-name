@@ -1,8 +1,16 @@
 import Component from './component'
 import { isElement } from './lib/utils'
 
+interface MountConfig {
+  props?: Record<string, any>
+}
+
 class Renderer {
-  mount(container: (new () => Component) | HTMLElement, selector: string) {
+  mount(
+    container: (new (props: Record<string, any>) => Component) | HTMLElement,
+    selector: string,
+    config?: MountConfig,
+  ) {
     if (!container) {
       throw new Error(
         'Error mounting container - the container passed in was invalid or does not exist',
@@ -19,7 +27,9 @@ class Renderer {
     const found_container = document.querySelector(selector),
       markup: HTMLElement = isElement(container)
         ? (container as HTMLElement)
-        : new (container as new () => Component)().runRender()
+        : new (container as new (props: Record<string, any>) => Component)(
+            config?.props || {},
+          ).runRender()
 
     if (found_container) {
       found_container.appendChild(markup)

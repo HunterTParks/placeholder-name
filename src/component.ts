@@ -1,11 +1,15 @@
 abstract class Component {
   state?: any
-  props?: Record<string, any>
+  props: Record<string, any>
   children: Record<string, Component> = {}
   directMarkup?: HTMLElement
   private parent?: HTMLElement | Component
   abstract name?: string
   abstract render(): HTMLElement
+
+  constructor(props: Record<string, any>) {
+    this.props = props
+  }
 
   setState(newState: any): void {
     if (this.state == newState) {

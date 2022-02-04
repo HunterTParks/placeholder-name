@@ -14,7 +14,7 @@ enum HTMLMarkdownTypes {
 }
 
 export function createElement(
-  elementOrComponent: (new () => Component) | string,
+  elementOrComponent: (new (props: Record<string, any>) => Component) | string,
   props: Record<string, any>,
   markup: string | Array<HTMLElement | string>,
 ): HTMLElement {
@@ -25,7 +25,7 @@ export function createElement(
   // If a component is passed in, instantiate it
   // If not, it's a string and an element can be created
   if (elementOrComponent && typeof elementOrComponent !== 'string') {
-    component = new elementOrComponent()
+    component = new elementOrComponent(props)
 
     if (!component.name) {
       throw Error('Cannot instantiate a component that does not have a name')
