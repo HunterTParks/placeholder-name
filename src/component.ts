@@ -1,5 +1,5 @@
 abstract class Component {
-  state?: any
+  state?: Record<string, any>
   props: Record<string, any>
   children: Record<string, Component> = {}
   directMarkup?: HTMLElement
@@ -17,6 +17,13 @@ abstract class Component {
     }
 
     this.state = newState
+
+    if (parent && parent instanceof Component) {
+      ;(this.parent as Component).directMarkup?.replaceChild(
+        this.directMarkup as HTMLElement,
+        this.render(),
+      )
+    }
   }
 
   setParent(parent: HTMLElement | Component) {
@@ -37,9 +44,8 @@ abstract class Component {
     }
   }
 
-  runRender(): HTMLElement {
+  runRender() {
     this.directMarkup = this.render()
-    return this.directMarkup
   }
 
   /**

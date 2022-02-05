@@ -29,7 +29,7 @@ class Renderer {
         ? (container as HTMLElement)
         : new (container as new (props: Record<string, any>) => Component)(
             config?.props || {},
-          ).runRender()
+          ).render()
 
     if (found_container) {
       found_container.appendChild(markup)
