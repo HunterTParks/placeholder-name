@@ -6,6 +6,7 @@ abstract class Component {
   private parent?: HTMLElement | Component
   abstract name?: string
   abstract render(): HTMLElement
+  protected wasMounted?(): void
 
   constructor(props: Record<string, any>) {
     this.props = props
@@ -18,11 +19,18 @@ abstract class Component {
 
     this.state = newState
 
-    if (parent && parent instanceof Component) {
+    if (this.parent && this.parent instanceof Component) {
       ;(this.parent as Component).directMarkup?.replaceChild(
         this.directMarkup as HTMLElement,
-        this.render(),
+        this.runRender(),
       )
+    } else if (this.parent && this.parent instanceof HTMLElement) {
+      const parent: HTMLElement = this.parent as HTMLElement
+      const child: HTMLElement = parent.querySelector(
+        (this.directMarkup as HTMLElement).tagName,
+      ) as HTMLElement
+
+      parent.replaceChild(this.runRender(), child)
     }
   }
 
@@ -44,8 +52,14 @@ abstract class Component {
     }
   }
 
-  runRender() {
+  runRender(): HTMLElement {
     this.directMarkup = this.render()
+
+    if (this.wasMounted) {
+      this.wasMounted()
+    }
+
+    return this.directMarkup
   }
 
   /**

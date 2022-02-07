@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "tsc -p ./tsconfig.json",
     "watch": "tsc index.ts --watch",
-    "test": "ts-mocha -r jsdom-global/register -p ./tsconfig.json tests/**/*.test.ts"
+    "test": "ts-mocha -p ./tsconfig.json tests/**/*.test.ts",
+    "test:state": "ts-mocha -p ./tsconfig.json tests/unit/state.test.ts -- --inspect --debug-brk"
   },
   "keywords": [],
   "author": "",

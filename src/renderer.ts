@@ -11,6 +11,8 @@ class Renderer {
     selector: string,
     config?: MountConfig,
   ) {
+    let component: Component | undefined
+
     if (!container) {
       throw new Error(
         'Error mounting container - the container passed in was invalid or does not exist',
@@ -21,20 +23,79 @@ class Renderer {
       throw new Error(
         'Error mounting container - the selector passed in was invalid',
       )
-      return
     }
 
-    const found_container = document.querySelector(selector),
-      markup: HTMLElement = isElement(container)
-        ? (container as HTMLElement)
-        : new (container as new (props: Record<string, any>) => Component)(
-            config?.props || {},
-          ).render()
+    const found_container: HTMLElement | null = document.querySelector(selector)
+    if (!found_container) {
+      throw new Error(
+        'Error mounting container - the selector passed in was valid but it would not find an element with the selector specified',
+      )
+    }
+
+    const markup: HTMLElement = isElement(container)
+      ? (container as HTMLElement)
+      : (() => {
+          // Really dumb looking but instantiate a new component and pass in props
+          component = new (container as new (
+            props: Record<string, any>,
+          ) => Component)(config?.props || {})
+
+          return component.runRender()
+        })()
 
     if (found_container) {
       found_container.appendChild(markup)
+      component?.setParent(found_container)
     }
+  }
+
+  mountAsync(
+    container: (new (props: Record<string, any>) => Component) | HTMLElement,
+    selector: string,
+    config?: MountConfig,
+  ) {
+    return new Promise<void>((resolve, reject) => {
+      let component: Component | undefined
+
+      if (!container) {
+        reject(
+          'Error mounting container - the container passed in was invalid or does not exist',
+        )
+      }
+
+      if (!selector) {
+        reject('Error mounting container - the selector passed in was invalid')
+      }
+
+      const found_container: HTMLElement | null = document.querySelector(
+        selector,
+      )
+      if (!found_container) {
+        reject(
+          'Error mounting container - the selector passed in was valid but it would not find an element with the selector specified',
+        )
+      }
+
+      const markup: HTMLElement = isElement(container)
+        ? (container as HTMLElement)
+        : (() => {
+            // Really dumb looking but instantiate a new component and pass in props
+            component = new (container as new (
+              props: Record<string, any>,
+            ) => Component)(config?.props || {})
+
+            return component.runRender()
+          })()
+
+      if (found_container) {
+        found_container.appendChild(markup)
+        component?.setParent(found_container)
+        resolve()
+      }
+    })
   }
 }
 
+const mount = new Renderer().mount
 export default Renderer
+export { mount }
