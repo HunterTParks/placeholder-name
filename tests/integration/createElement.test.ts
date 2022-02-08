@@ -19,12 +19,21 @@ describe('When creating a single new element', function () {
   before(function () {
     // Initialize DOM and add app container to body
     JSDom()
-    container = document.createElement('div')
-    container.id = 'app'
-    document.body.appendChild(container)
 
     // Initialize Renderer
     renderer = new Renderer()
+  })
+
+  beforeEach(() => {
+    document.body.innerHTML += `
+    <body>
+        <div id="app"></div>
+    </body>
+    `
+  })
+
+  afterEach(function () {
+    document.body.innerHTML = ''
   })
 
   it('Should have the appropriate markup in the DOM tree', function () {
@@ -46,6 +55,8 @@ describe('When creating a single new element', function () {
         render(): HTMLElement {
           return createElement(this.name, null, [
             createElement(HelloWorld, null, null),
+            '<div id="beginning-div">Hello from beginning-div</div>',
+            '<div id="ending-div">Hello from ending-div</div>',
           ])
         }
       },
@@ -57,11 +68,18 @@ describe('When creating a single new element', function () {
     const helloElement = document.querySelector(
       '#app > goodbyeworld > helloworld',
     )
+    const beginningDiv = document.querySelector('#app #beginning-div')
+    const endingDiv = document.querySelector('#app #ending-div')
 
     assert.isOk(goodbyeElement)
     assert.isOk(helloElement)
+    assert.isOk(beginningDiv)
+    assert.isOk(endingDiv)
+
+    console.log('Body: ', document.body.innerHTML)
   })
 
+  // Is this test necessary?
   it("Should add props to it's private properties", function () {
     const props: Record<string, any> = {
       hello: 'world!',
