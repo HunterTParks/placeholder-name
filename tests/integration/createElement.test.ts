@@ -75,8 +75,6 @@ describe('When creating a single new element', function () {
     assert.isOk(helloElement)
     assert.isOk(beginningDiv)
     assert.isOk(endingDiv)
-
-    console.log('Body: ', document.body.innerHTML)
   })
 
   // Is this test necessary?
