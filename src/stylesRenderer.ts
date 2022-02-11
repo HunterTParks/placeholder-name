@@ -5,8 +5,12 @@ class StyleRenderer {
     this.styles = []
   }
 
-  addStyles(styles: string): void {
-    this.styles.push(styles)
+  addStyles(styles: string | Array<string>): void {
+    if (!Array.isArray(styles)) {
+      styles = [styles]
+    }
+
+    this.styles.push(...styles)
   }
 
   clearStyles(): void {

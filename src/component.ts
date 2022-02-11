@@ -6,7 +6,7 @@ abstract class Component {
   props: Record<string, any>
   children: Record<string, Component> = {}
   directMarkup?: HTMLElement
-  styles?: string
+  styles?: string | Array<string>
   private parent?: HTMLElement | Component
   abstract name?: string
   abstract render(): HTMLElement
