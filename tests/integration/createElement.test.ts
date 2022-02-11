@@ -21,7 +21,7 @@ describe('When creating a single new element', function () {
     JSDom()
 
     // Initialize Renderer
-    renderer = new Renderer()
+    renderer = new Renderer(() => {})
   })
 
   beforeEach(() => {

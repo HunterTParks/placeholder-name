@@ -1,8 +1,12 @@
+import stylesRenderer from './stylesRenderer'
+import StylesRenderer from './stylesRenderer'
+
 abstract class Component {
   state?: Record<string, any>
   props: Record<string, any>
   children: Record<string, Component> = {}
   directMarkup?: HTMLElement
+  styles?: string
   private parent?: HTMLElement | Component
   abstract name?: string
   abstract render(): HTMLElement
@@ -54,6 +58,10 @@ abstract class Component {
 
   runRender(): HTMLElement {
     this.directMarkup = this.render()
+
+    if (this.styles) {
+      stylesRenderer.addStyles(this.styles)
+    }
 
     if (this.wasMounted) {
       this.wasMounted()

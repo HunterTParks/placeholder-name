@@ -11,7 +11,7 @@ describe('When creating a new Renderer', function () {
 
     markup = document.createElement('span')
     markup.innerText = 'Hello world!'
-    renderer = new Renderer()
+    renderer = new Renderer(() => {})
   })
 
   it('should be able to append the correct markup (without a Component) to the DOM Tree', function () {

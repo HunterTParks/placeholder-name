@@ -1,11 +1,18 @@
 import Component from './component'
 import { isElement } from './lib/utils'
+import StylesRenderer from './stylesRenderer'
 
 interface MountConfig {
   props?: Record<string, any>
 }
 
 class Renderer {
+  stylesGenerator: () => void
+
+  constructor(stylesGenerator: () => void) {
+    this.stylesGenerator = stylesGenerator
+  }
+
   mount(
     container: (new (props: Record<string, any>) => Component) | HTMLElement,
     selector: string,
@@ -42,6 +49,8 @@ class Renderer {
 
           return component.runRender()
         })()
+
+    StylesRenderer.generate()
 
     if (found_container) {
       found_container.appendChild(markup)
@@ -96,6 +105,6 @@ class Renderer {
   }
 }
 
-const mount = new Renderer().mount
+const mount = new Renderer(StylesRenderer.generate).mount
 export default Renderer
 export { mount }

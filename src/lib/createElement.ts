@@ -32,7 +32,7 @@ export function createElement(
     }
 
     elementType = component.name
-    finalMarkup += component.render().outerHTML
+    finalMarkup += component.runRender().outerHTML
   } else {
     elementType = elementOrComponent
   }

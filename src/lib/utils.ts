@@ -9,3 +9,10 @@ export function isElement(o: any) {
         o.nodeType === 1 &&
         typeof o.nodeName === 'string'
 }
+
+export function css(stylesString: TemplateStringsArray): CSSStyleDeclaration {
+  const ele = document.createElement('div')
+  ele.style.cssText += stylesString
+
+  return ele.style
+}
