@@ -1,18 +1,6 @@
 import Component from '../component'
 import { isElement } from './utils'
 
-enum HTMLMarkdownTypes {
-  'div',
-  'span',
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'p',
-}
-
 export function createElement(
   elementOrComponent: (new (props: Record<string, any>) => Component) | string,
   props: Record<string, any>,
