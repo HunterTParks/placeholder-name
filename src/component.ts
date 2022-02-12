@@ -1,4 +1,3 @@
-import stylesRenderer from './stylesRenderer'
 import StylesRenderer from './stylesRenderer'
 
 abstract class Component {
@@ -60,7 +59,7 @@ abstract class Component {
     this.directMarkup = this.render()
 
     if (this.styles) {
-      stylesRenderer.addStyles(this.styles)
+      StylesRenderer.addStyles(this.styles)
     }
 
     if (this.wasMounted) {
