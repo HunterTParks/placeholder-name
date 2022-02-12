@@ -6,9 +6,7 @@ export function createElement(
   props: Record<string, any>,
   markup: string | Array<HTMLElement | string>,
 ): HTMLElement {
-  let elementType: string,
-    component: Component,
-    finalMarkup: string = ''
+  let elementType: string, component: Component, finalMarkup: HTMLElement
 
   // If a component is passed in, instantiate it
   // If not, it's a string and an element can be created
@@ -20,8 +18,10 @@ export function createElement(
     }
 
     elementType = component.name
-    finalMarkup += component.runRender().outerHTML
+    finalMarkup = document.createElement(elementType)
+    finalMarkup.outerHTML += component.runRender().outerHTML
   } else {
+    finalMarkup = document.createElement(elementOrComponent)
     elementType = elementOrComponent
   }
 
@@ -35,12 +35,12 @@ export function createElement(
       continue
     }
 
-    finalMarkup += isElement(newMarkup)
-      ? (newMarkup as HTMLElement).innerHTML
-      : newMarkup
+    if (isElement(newMarkup)) {
+      finalMarkup.appendChild(newMarkup as HTMLElement)
+    } else {
+      finalMarkup.append(newMarkup)
+    }
   }
 
-  const element = document.createElement(elementType)
-  element.innerHTML += finalMarkup
-  return element
+  return finalMarkup
 }

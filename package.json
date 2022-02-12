@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc -p ./tsconfig.json",
+    "compile:rollup": "rollup  --config ./config/rollup.config.js",
+    "run:hello-world-example": "rm -rf ./examples/hello-world/public/* && rollup --config ./config/umd.config.js && copyfiles --flat ./dist/**/*.js ./examples/hello-world/public && python3 -m http.server 8080 -d ./examples/hello-world",
+    "run:button-test": "rm -rf ./examples/button-test/public/* && rollup --config ./config/umd.config.js && copyfiles --flat ./dist/**/*.js ./examples/button-test/public && python3 -m http.server 8080 -d ./examples/button-test",
     "watch": "tsc index.ts --watch",
     "test": "ts-mocha -p ./tsconfig.json tests/**/*.test.ts",
     "test:state": "ts-mocha -p ./tsconfig.json tests/unit/state.test.ts -- --inspect --debug-brk"
