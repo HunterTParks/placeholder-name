@@ -38,7 +38,7 @@ export function createElement(
     if (isElement(newMarkup)) {
       finalMarkup.appendChild(newMarkup as HTMLElement)
     } else {
-      finalMarkup.append(newMarkup)
+      finalMarkup.insertAdjacentHTML('beforeend', newMarkup as string)
     }
   }
 

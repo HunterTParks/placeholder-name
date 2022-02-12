@@ -36,7 +36,6 @@
             }
 
             increment() {
-              console.log('Incrementing - old value: ', this.state.counter)
               this.setState({
                 counter: ++this.state.counter,
               })
@@ -45,7 +44,7 @@
             render() {
               return sugar.createElement('div', null, [
                 this.button,
-                `${this.state.counter}`,
+                `<div>${this.state.counter}</div>`,
               ])
             }
           },
