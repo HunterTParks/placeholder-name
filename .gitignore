@@ -3,3 +3,4 @@ node_modules
 
 # Example public folders
 examples/**/public/*
+!examples/**/public/.gitkeep
